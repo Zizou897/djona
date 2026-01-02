@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande d'information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .email-header {
+            background-color: #015479;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .email-header h2 {
+            font-weight: bolder;
+        }
+        .email-body {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .email-body h3 {
+            color: #015479;
+            font-weight: bolder;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #015479;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        .footer {
+            background-color: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <p>Bonjour Admin,</p>
+            <p>Une nouvelle demande a été reçue de {{ nom }} {{ prenom }} pour le véhicule suivant :</p>
+        </div>
+        <div class="email-body">
+            <h3>Informations sur le véhicule :</h3>
+            <table>
+                <tr>
+                    <th>ID du véhicule</th>
+                    <td>{{ product_id }}</td>
+                </tr>
+                <tr>
+                    <th>Marque</th>
+                    <td>{{ marque }}</td>
+                </tr>
+                <tr>
+                    <th>Modèle</th>
+                    <td>{{ modele }}</td>
+                </tr>
+            </table>
+
+            <h3>Informations du client :</h3>
+            <table>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ nom }} {{ prenom }}</td>
+                </tr>
+                <tr>
+                    <th>Numéro de téléphone</th>
+                    <td>{{ numero }}</td>
+                </tr>
+                <tr>
+                    <th>Ville</th>
+                    <td>{{ ville }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user_email }}</td>
+                </tr>
+                <tr>
+                    <th>Nombre de véhicules souhaité</th>
+                    <td>{{ description }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="footer">
+            <p>Merci de prendre en charge cette demande.</p>
+        </div>
+    </div>
+</body>
+</html>

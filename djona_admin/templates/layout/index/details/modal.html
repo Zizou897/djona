@@ -1,0 +1,129 @@
+<!-- Modal pour afficher la galerie -->
+<div id="imageGalleryModal" class="modal fade" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="galleryModalLabel"> {{ product.marque }} </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Image principale -->
+                <div class="main-image-container position-relative text-center">
+                    <img id="currentImage" 
+                         class="img-fluid" 
+                         style="max-height: 70vh; object-fit: contain;" 
+                         src="{{ images.first.image.url }}" 
+                         alt="Image principale">
+                    <div id="imageCounter" 
+                         class="position-absolute bottom-0 start-50 translate-middle-x bg-dark text-white py-1 px-3 rounded">
+                        1 / {{ images|length }}
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="navigation-controls position-absolute top-50 w-100 d-flex justify-content-between px-3">
+                    <button class="btn btn-dark" id="prevImage" onclick="showPreviousImage()">&lt;</button>
+                    <button class="btn btn-dark" id="nextImage" onclick="showNextImage()">&gt;</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal d'erreur -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true" style="z-index: 2000;" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header flex-column text-center" style="padding: 20px;">
+                <button type="button" class="btn-fermer" data-bs-dismiss="modal" aria-label="Close">X</button><br/>
+                <h3 class="fw-bold">Passez votre réservation</h3>
+                <p class="text-muted">
+                    Roulez en toutes sécurité 
+                    <span style="color: red;font-weight:500;">Tous champs sont obligatoires *</span>
+                </p>
+            </div>
+
+            <div class="modal-body text-center">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12 col-md-10 col-sm-12">
+                        <form method="POST" action="" class="p-4 rounded border">
+                            {% csrf_token %}
+
+                            <!-- Informations sur le véhicule -->
+                            <div class="mb-4 text-center">
+                                {% if product.first_image_url %}
+                                    <img src="{{ product.first_image_url }}" alt="{{ product.nom }}" class="img-fluid w-100 rounded">
+                                {% else %}
+                                    <p class="text-muted">Pas d'image disponible</p>
+                                {% endif %}
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <input type="text" id="marque" class="form-control" value="{{ product.marque }}" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="modele" class="form-control" value="{{ product.modele }}" readonly>
+                                </div>
+                            </div>
+
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <select id="civilite" name="civilite" class="form-control" required>
+                                        <option value="" disabled selected>Choisir une civilité</option>
+                                        <option value="monsieur">Monsieur</option>
+                                        <option value="madame">Madame</option>
+                                        <option value="mademoiselle">Mademoiselle</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="nom" name="nom" class="form-control" placeholder="Votre nom" required>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <input type="text" id="prenom" name="prenom" class="form-control" placeholder="Votre prénom" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="numero" name="numero" class="form-control" placeholder="Votre numéro" required>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <input type="text" id="ville" name="ville" class="form-control" placeholder="Votre ville" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="Votre e-mail" required>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <input type="text" id="nom_entreprise" name="nom_entreprise" class="form-control" placeholder="Entreprise ou votre nom" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="number" id="nombre_vehicule" name="nombre_vehicule" class="form-control" placeholder="Nombre de véhicules" required>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <input type="text" id="localisation" name="localisation" class="form-control" placeholder="Entrez la localisation" required>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn w-100 py-3 d-flex align-items-center justify-content-center" style="background: #015479;color:#fff;">
+                                    <i class="bi bi-envelope me-2"></i> Soumettre le formulaire
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin du corps de la modale -->
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br/>
+    <div class="container my-5 vehi_contact">
+
+        <section class="hero-section text-center bg-light" style="padding: 130px;">
+            <div class="container">
+                <h2 class="fw-bold" style="text-transform: uppercase;">Contact pour <span style="color: #015479;">{{ product.marque }} {{ product.modele }}</span></h2>
+            <p class="text-muted">Veuillez remplir le formulaire ci-dessous pour plus d'informations.</p>
+            </div>
+        </section><br/><br/>
+
+        <!-- Messages de succès/erreur -->
+        {% if messages %}
+            <div class="container mt-4">
+                {% if messages %}
+                    <div class="alert alert-info">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+
+        <!-- Formulaire -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+
+                <form method="POST" action="{% url 'contact' product_id=product.id %}" class="shadow-lg p-4 rounded border" id="contactForm">
+                    {% csrf_token %}
+                
+                    <!-- Informations sur le véhicule -->
+                    <div class="mb-4 text-center">
+                        {% if product.first_image_url %}
+                            <img src="{{ product.first_image_url }}" alt="{{ product.nom }}" class="img-fluid w-100 rounded">
+                        {% else %}
+                            <p class="text-muted">Pas d'image disponible</p>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label for="marque" class="form-label fw-semibold">Marque</label>
+                        <input type="text" id="marque" name="marque" class="form-control" value="{{ product.marque }}" readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label for="modele" class="form-label fw-semibold">Modèle</label>
+                        <input type="text" id="modele" class="form-control" name="modele" value="{{ product.modele }}" readonly>
+                    </div>
+                
+                    <!-- Informations client -->
+                    <div class="mb-4">
+                        <label for="nom" class="form-label fw-semibold">Nom</label>
+                        <input type="text" id="nom" name="nom" class="form-control" placeholder="Entrez votre nom" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="prenom" class="form-label fw-semibold">Prénom</label>
+                        <input type="text" id="prenom" name="prenom" class="form-control" placeholder="Entrez votre prénom" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="numero" class="form-label fw-semibold">Numéro de téléphone</label>
+                        <input type="text" id="numero" name="numero" class="form-control" placeholder="Entrez votre numéro" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="ville" class="form-label fw-semibold">Ville</label>
+                        <input type="text" id="ville" name="ville" class="form-control" placeholder="Entrez votre ville" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="form-label fw-semibold">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Entrez votre e-mail" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-semibold">Nombre de véhicules</label>
+                        <input type="number" id="description" name="description" class="form-control" placeholder="Entrez le nombre de véhicules" required>
+                    </div>
+                
+                    <!-- Bouton d'envoi -->
+                    <div class="text-center">
+                        <button type="submit" class="btn w-100 py-3 d-flex align-items-center justify-content-center" style="background: #015479;color:#fff;"
+                         data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                            <i class="bi bi-envelope me-2"></i> Soumettre le formulaire
+                        </button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+
+
+        <!-- Boîte modale -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content rounded-4 shadow-lg">
+                    <div class="modal-header text-white" style="background:#013b58;">
+                        <h5 class="modal-title fw-bold" id="confirmationModalLabel">Confirmation</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center p-4">
+                        <i class="bi bi-check-circle-fill text-success display-4 mb-3"></i> <!-- Icône de succès -->
+                        <p class="mb-0 fs-5 text-muted">Vos informations ont été envoyées avec succès !</p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary px-4 py-2" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <style>
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+        }
+        
+        .modal-header {
+            border-bottom: none;
+        }
+        
+        .modal-footer {
+            border-top: none;
+        }
+        
+        .btn-primary {
+            background-color: #015479;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #013b58;
+        }
+    </style>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalCloseButton = document.querySelector("#confirmationModal .btn-close");
+            const modalCloseButtonFooter = document.querySelector('#confirmationModal .btn-primary');
+    
+            if (modalCloseButton) {
+                modalCloseButton.addEventListener('click', function () {
+                    var modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                    modal.hide();     
+                    window.location.href = '/';
+                });
+            }
+    
+            if (modalCloseButtonFooter) {
+                modalCloseButtonFooter.addEventListener('click', function () {
+                    var modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                    modal.hide();     
+                    window.location.href = '/'; 
+                });
+            }
+        });
+    </script>
+    
+    
+
+{% endblock %}

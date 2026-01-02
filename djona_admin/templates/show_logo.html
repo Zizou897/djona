@@ -1,0 +1,17 @@
+
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Nos Partenaires</h1>
+        
+        {% if logos %}
+            <div class="logo-container">
+                {% for logo in logos %}
+                    <div class="logo-item">
+                        <img src="{{ logo.image.url }}" alt="{{ logo.name }}">
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">Aucun logo disponible pour l'instant.</p>
+        {% endif %}
+    </div>
+

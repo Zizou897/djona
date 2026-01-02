@@ -1,0 +1,73 @@
+<div class="container-fluid p-0">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-lg">
+        <div class="container justify-content-center">
+            <a class="navbar-brand fw-bold text-primary mx-auto" href="#">
+                {% for site in config_site %}
+                    <img src="{{ site.image.url }}" alt="logo" style="width:150px; height:40px;">
+                {% endfor %}
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto text-center">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">Accueil</a>                    
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'achat' %}active{% endif %}" href="{% url 'achat' %}">Achat voiture</a>                    
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'location' %}active{% endif %}" href="{% url 'location' %}">Location</a>                    
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'piece-detache' %}active{% endif %}" href="{% url 'piece-detache' %}">Pièce détachée</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Djona
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'rejoindre' %}active{% endif %}" href="{% url 'rejoindre' %}">Nous rejoindre</a></li>
+                            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">À propos</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contacts' %}active{% endif %}" href="{% url 'contacts' %}">Contacts</a>
+                    </li>
+                </ul>
+                <div class="d-flex justify-content-center mt-3 mt-lg-0">
+                    <a href="#" class="btn px-4" style="background:#015479;color:#fff;transition: background-color 0.3s ease;">
+                        <i class="fa fa-car"></i> Autres services
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+
+<style>
+    .nav-link.active {
+        color: #f0822e !important;
+        font-weight: bold;      
+        transition: all 0.3s ease;
+    }
+</style>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", function () {
+                navLinks.forEach(nav => nav.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+    });
+</script>

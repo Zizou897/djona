@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% include 'layout/index/details/produit.html' %}
+    {% include 'layout/index/details/info_generale.html' %}
+    {% include 'layout/index/details/resume.html' %}
+
+    {% if valeurs.exists %}
+        <div class="section_info">
+            <div class="container">
+                <h4 class="features-title" style="font-size: 24px; font-weight: bolder; margin-bottom: 20px; text-align: center; text-transform: uppercase; color: #000000; margin-bottom: 40px;">
+                    Pourquoi choisir Djona ?
+                </h4>
+                <div class="features-container d-flex justify-content-start">
+                    {% for valeur in valeurs %}
+                        <div class="feature-items text-center mx-3">
+                            <i class="{{ valeur.svg_code }}" style="font-size: 40px;"></i>
+                            <h6 class="fw-bold"> {{ valeur.title }} </h6>
+                            <p> {{ valeur.description }} </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="h4 fw-bold">Description de {{ product.marque }}</h2>
+                <p class="text-muted">{{ product.description }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% include 'layout/index/details/similar.html' %}
+    {% include 'layout/index/details/modal.html' %}
+    {% include 'layout/index/details/fixed_bars.html' %}
+
+    
+    <style>
+        .navigation-controls button {
+            z-index: 10;
+        }
+        .thumbnails img:hover {
+            border: 2px solid #007bff;
+        }
+        .view-all-button {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
+            z-index: 10;
+            padding: 10px 15px;
+            background-color: rgba(0, 0, 0, 0.6); /* Fond semi-transparent */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+    
+        .view-all-button:hover {
+            background-color: rgba(0, 0, 0, 0.8); /* Fond plus foncé au survol */
+        }
+
+        .fixed-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff; /* Blanc semi-transparent */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1050; /* Assure qu'elle est au-dessus des autres éléments */
+            transition: 0.3s, opacity 0.3s ease-in-out;
+        }
+    
+        /* Masquer la barre par défaut */
+        .fixed-bar.d-none {
+            top: -100px; /* Position hors de l'écran */
+            opacity: 0;
+        }
+    
+        /* Afficher la barre */
+        .fixed-bar.visible {
+            top: 0;
+            opacity: 1;
+            transition: top 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+    
+        /* Ajustements pour les images et le texte */
+        .fixed-bar img {
+            max-height: 60px;
+        }
+    
+        .fixed-bar h5 {
+            font-size: 1.25rem;
+        }
+    
+        .fixed-bar p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    
+        /* Boutons dans la barre fixe */
+        .fixed-bar .btn {
+            font-size: 0.9rem;
+        }
+
+        .features-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 70px;
+            margin-bottom: 70px;
+        }
+        
+        .feature-item, .feature-items {
+            text-align: center;
+            max-width: 280px;
+            height: 200px;
+            background-color:  #fff;
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+        .feature-items {
+            background-color:  #015479;
+        }
+        .feature-items:hover {
+            background-color:  #ffffff;
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            transition: .3s ease-in-out;
+            border-bottom: 3px solid #015479;
+        }
+        .feature-items:hover .feature-icon, .feature-items:hover h6, .feature-items:hover p {
+            color:  #000;
+        }
+        .feature-item:hover {
+            background-color:  #015479;
+            transition: .3s ease-in-out;
+        }
+        .feature-item:hover .feature-icon, .feature-item:hover h6, .feature-item:hover p {
+            color:  #ffffff;
+            transition: .3s ease-in-out;
+        }
+        
+        .feature-icon {
+            font-size: 32px;
+            color: #000000; /* Couleur personnalisable */
+            margin-bottom: 10px;
+        }
+        .feature-items .feature-icon, .feature-items h6, .feature-items p {
+            color:  #ffffff;
+        }
+        
+        .feature-item h6 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+
+        .feature-item p {
+            font-size: 16px;
+            margin: 5px;
+            color: #a09e9e;
+        }
+        
+        .section_info i {
+            color: #fff;
+            font-size: 24px;
+        }
+    </style>
+
+    <script>
+        // Variables globales
+        let currentIndex = 1; // Index de l'image courante
+        const totalImages = {{ images|length }}; // Nombre total d'images
+        const imageList = [
+            {% for image in images %}"{{ image.image.url }}"{% if not forloop.last %}, {% endif %}{% endfor %}
+        ];
+    
+        /**
+         * Met à jour l'image principale affichée.
+         * @param {string} url - URL de l'image.
+         * @param {number} index - Index de l'image.
+         */
+        function setMainImage(url, index) {
+            document.getElementById('currentImage').src = url;
+            currentIndex = index;
+            updateCounter();
+        }
+    
+        /**
+         * Affiche l'image suivante.
+         */
+        function showNextImage() {
+            currentIndex = (currentIndex % totalImages) + 1;
+            setMainImage(imageList[currentIndex - 1], currentIndex);
+        }
+    
+        /**
+         * Affiche l'image précédente.
+         */
+        function showPreviousImage() {
+            currentIndex = (currentIndex - 2 + totalImages) % totalImages + 1;
+            setMainImage(imageList[currentIndex - 1], currentIndex);
+        }
+    
+        /**
+         * Met à jour le compteur d'images.
+         */
+        function updateCounter() {
+            const counter = document.getElementById('imageCounter');
+            counter.textContent = `${currentIndex} / ${totalImages}`;
+        }
+    
+        /**
+         * Affiche ou masque la barre fixe en fonction du défilement.
+         */
+        document.addEventListener('DOMContentLoaded', function () {
+            const fixedBar = document.getElementById('fixedBar');
+            const fixedBars = document.getElementById('fixedBars');
+            const scrollTrigger = 500; // Pixels pour afficher la barre fixe
+    
+            window.addEventListener('scroll', function () {
+                // Gère la visibilité de la barre supérieure
+                if (window.scrollY > scrollTrigger) {
+                    fixedBar.classList.remove('d-none');
+                    fixedBar.classList.add('visible');
+                } else {
+                    fixedBar.classList.remove('visible');
+                    fixedBar.classList.add('d-none');
+                }
+    
+                // Gère la visibilité de la barre inférieure
+                if (window.scrollY > 400) {
+                    fixedBars.classList.remove('d-none');
+                } else {
+                    fixedBars.classList.add('d-none');
+                }
+            });
+        });
+    
+        /**
+         * Met à jour l'image principale lors d'un clic.
+         * @param {string} imageUrl - URL de la nouvelle image.
+         */
+        function changeMainImage(imageUrl) {
+            const mainImage = document.getElementById('mainImage');
+            mainImage.src = imageUrl;
+        }
+    </script>
+    
+
+{% endblock %}

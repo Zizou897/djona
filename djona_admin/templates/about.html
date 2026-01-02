@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <br/><br/><br/><br/>
+    <div class="container">
+
+        <section class="hero-section text-center bg-light" style="padding: 150px;">
+            <div class="container">
+                <h1 class="display-4 fw-bold">À propos de Djona</h1>
+                <p class="lead mt-3">Votre partenaire de confiance pour l'achat, la location et l'entretien de voitures.</p>
+            </div>
+        </section>
+
+        <section id="mission" class="py-5">
+            <div class="container">
+
+                {% if elements %}
+                    <div class="row">
+                        {% for element in elements %}
+                            <div class="{% if elements|length == 1 %}col-12{% else %}col-md-6{% endif %} mb-4" id="mission_card">
+                                <div class="card border-0 p-4">
+                                    <h3 class="fw-bold"> {{ element.titre }} </h3>
+                                    <p class="text-muted mt-3"> {{ element.description }} </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        </section>
+        
+
+        <!-- Services Section -->
+        <section class="py-4">
+            <div class="container text-center">
+                <h2 class="fw-bold">Nos Services</h2>
+                <p class="text-muted mt-3">Découvrez tout ce que nous avons à offrir pour répondre à vos attentes automobiles.</p>
+                <div class="row mt-5">
+                    <!-- Vente de voitures -->
+
+                    <div class="row">
+
+                        <div class="row">
+
+                            {% if service %}
+                                {% for choix in service %}
+                                    <div class="col-md-4 service mb-4">
+                                        <div class="card border-0">
+                                            <div class="card-body text-center">
+                                                <div class="mb-3">
+                                                    <i class="{{ choix.svg_code }}" style="font-size: 2.5rem;"></i>
+                                                </div>
+                                                <h5 class="card-title fw-bold"> {{ choix.titre }} </h5>
+                                                <p class="card-text text-muted"> {{ choix.description }} </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        
+    </div>
+
+{% endblock %}

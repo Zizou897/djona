@@ -1,0 +1,103 @@
+<!-- General Vehicle Information Section -->
+<div class="section_info py-10" style="background:#015479;padding:70px;">
+    <div class="container">
+        <!-- Section Title -->
+        <h4 class="features-title text-white text-uppercase text-center text-lg mb-10" style="font-size: 24px;font-weight: bold;
+        margin-bottom: 20px;margin-bottom:40px;">
+            Informations générales sur la {{ product.marque }} ( {{ product.modele }} )
+        </h4>
+        <!-- Vehicle Details: First Row -->
+        <div class="row gx-2 mb-6">
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-tachometer-alt text-white"></i>
+                <div class="text-right text-white">
+                    <span>Kilométrage</span>
+                    <p>{{ product.kilometrage }} km</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-gas-pump text-white"></i>
+                <div class="text-right text-white">
+                    <span>Type de carburant</span>
+                    <p>{{ product.carburant|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-tools text-white"></i>
+                <div class="text-right text-white">
+                    <span>Boîte de vitesse</span>
+                    <p>{{ product.transmission|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fa-solid fa-car-battery text-white"></i>
+                <div class="text-right text-white">
+                    <span>Moteur</span>
+                    <p>{{ product.moteur|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-chair text-white"></i>
+                <div class="text-right text-white">
+                    <span>Place</span>
+                    <p>{{ product.place|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-car text-white"></i>
+                <div class="text-right text-white">
+                    <span>Couleur intérieur</span>
+                    <p>{{ product.couleur_interieur|capfirst }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehicle Details: Second Row -->
+        <div class="row gx-2">
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-car text-white"></i>
+                <div class="text-right text-white">
+                    <span>Couleur extérieur</span>
+                    <p>{{ product.couleur_exterieur|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-circle text-white"></i>
+                <div class="text-right text-white">
+                    <span>Cylindrée</span>
+                    <p>{{ product.cylindre|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fa-solid fa-car text-white"></i>
+                <div class="text-right text-white">
+                    <span>Carrosserie</span>
+                    <p>{{ product.type|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-tachometer-alt text-white"></i>
+                <div class="text-right text-white">
+                    <span>Puissance fiscale</span>
+                    <p>{{ product.puissance_fiscale|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-list-check text-white"></i>
+                <div class="text-right text-white">
+                    <span>Condition</span>
+                    <p>{{ product.condition|capfirst }}</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center">
+                <i class="fas fa-key text-white"></i>
+                <div class="text-right text-white">
+                    <span>Nombre de propriétaire</span>
+                    <p>{{ product.nbre_proprio|capfirst }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Vehicle Information Section -->
+

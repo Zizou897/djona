@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br/><br/><br/>
+    <div class="container my-5">
+        {% if informations %}
+            <div class="alert alert-info alert-dismissible d-flex flex-row justify-content-between align-items-center p-1 mb-0">
+                <span class="badge bg-primary text-white">Informations:</span>
+                {% for info in informations %}
+                    <p id="trending-text" class="text-truncate flex-grow-1 mb-0 mx-3"> {{ info.description }} </p>
+                {% endfor %}
+            </div> 
+        {% endif %}
+
+        {% include "slide.html" with images=images %}
+        {% include 'layout/product_card_location.html' %}
+
+    </div>
+
+{% endblock %}

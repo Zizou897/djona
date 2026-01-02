@@ -1,0 +1,151 @@
+<div class="container py-5">
+    <div class="row g-5 d-flex align-items-start" style="padding-top:100px;">
+        <!-- Section principale avec l'image -->
+        <div class="col-md-8 position-relative">
+            <!-- Image principale avec tooltip -->
+            <img id="mainImage" 
+                 src="{{ images.first.image.url }}" 
+                 class="d-block w-100 position-relative" 
+                 alt="{{ product.nom }}" 
+                 data-bs-toggle="tooltip" 
+                 data-bs-placement="top" 
+                 title="{{ product.marque }} - {{ product.modele }}" 
+                 style="object-fit: cover; height: 500px;">
+            
+            <!-- Bouton "Voir toutes les images" -->
+            {% comment %} <button type="button" 
+                    class="btn btn-secondary position-absolut view-all-button disabled" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#imageGalleryModal" 
+                    style="bottom: 120px; left: 50%;">
+                Voir toutes les images
+            </button> {% endcomment %}
+
+            <!-- Miniatures d'images -->
+            <div class="mt-3 d-flex justify-content-center">
+                {% for image in images %}
+                    <div class="mx-2">
+                        <img src="{{ image.image.url }}" 
+                             class="img-fluid rounded" 
+                             alt="{{ product.nom }}" 
+                             style="object-fit: cover; height: 80px; cursor: pointer;" 
+                             onclick="changeMainImage('{{ image.image.url }}')">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Section des détails -->
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+                <h2 class="fw-bold mb-4 text-uppercase">Détail du produit</h2>
+                <p class="text-muted mb-2">Marque : <strong style="text-transform: uppercase;">{{ product.marque }}</strong></p>
+                <hr class="my-2">
+                <p class="text-muted mb-2">Modèle : <strong>{{ product.modele }}</strong></p>
+                <hr class="my-2">
+                <p class="text-muted mb-2">Carburant : <strong>{{ product.carburant|capfirst }}</strong></p>
+                <hr class="my-2">
+                <p class="text-muted mb-2">Carrosserie : <strong>{{ product.type|capfirst }}</strong></p>
+                <hr class="my-2">
+                <p class="text-muted mb-2">Kilométrage : <strong>{{ product.kilometrage }} Km</strong></p>
+                <hr class="my-2">
+                <p class="text-muted mb-2">Transmission : <strong>{{ product.transmission|capfirst }}</strong></p>
+                <hr class="my-2">
+                <p class="text-muted">Statut du véhicule : 
+                    <strong class="px-2 py-1 rounded" style="background-color: #FFEBCC; color: #FF7101;">
+                        {{ product.statut }}
+                    </strong>
+                </p>
+                <hr class="my-2">
+                <h5 class="mb-2 fw-bold">{{ product.prix }} F CFA</h5>
+                
+                <hr class="my-2">
+
+                <!-- Affichage du stock disponible pour la marque et le modèle (Vente) -->
+                {% if product.statut.nom == 'vente' %}
+                    {% for vehicule in vehicule_counts %}
+                        <p style="font-weight: bold;">Stock disponible : {{ vehicule.total }} voiture{{ vehicule.total|pluralize }} - {{ vehicule.marque }} - {{ vehicule.modele }}</p>
+                    {% endfor %}
+
+                    <hr class="my-2">
+                {% endif %}
+
+
+                <!-- Boutons d'actions -->
+                {% if product.statut.nom|lower != 'vendu' and product.statut.nom|lower != 'réservé' %}
+                    <div class="row g-3 mt-3">
+                        <div class="col-12">
+                            <a href="{% url 'contact' product.id %}" 
+                            class="btn btn-outline-primary w-100 py-3">
+                                <i class="bi bi-envelope me-2"></i> Intéressé
+                            </a>
+                        </div>
+                        <div class="col-12">
+                            <a href="https://wa.me/22540018376?text={{ whatsapp_message|urlencode }}" 
+                            target="_blank" 
+                            class="btn btn-success w-100 py-3">
+                                <i class="bi bi-whatsapp me-2"></i> WhatsApp
+                            </a>
+                        </div>
+                        {% if product.statut.nom|lower != 'vente' %}
+                            <div class="col-12">
+                                <button class="btn btn-primary w-100 py-3" 
+                                        type="button" disabled 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#contactModal"
+                                        style="background: #154698; color: #fff;"
+                                        data-product-id="{{ product.id }}">
+                                    <i class="bi bi-calendar-check me-2"></i> Réservation
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Section des caractéristiques -->
+        {% if fidelisation.exists %}
+            <div class="features-container d-flex justify-content-start">
+                {% for fidel in fidelisation %}
+                    <div class="feature-item mx-3"> 
+                        <i class="{{ fidel.svg_code }}"></i>
+                        <h6> {{ fidel.title }} </h6>
+                        <p> {{ fidel.description|truncatechars:50 }} </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal pour la galerie d'images -->
+    <div class="modal fade" id="imageGalleryModal" tabindex="-1" aria-labelledby="imageGalleryLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageGalleryLabel">Galerie d'images</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for image in images %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <img src="{{ image.image.url }}" class="d-block w-100" alt="...">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Précédent</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Suivant</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

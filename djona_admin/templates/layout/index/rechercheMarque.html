@@ -1,0 +1,148 @@
+<div class="container rechercheMarque">
+    <form method="get" action="{% url 'recherche' %}">
+        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-4 g-3">
+            <div class="col">
+                <select class="form-select" id="marque" name="marque">
+                    <option value="" disabled selected>Marque</option>
+                    {% for marque in carburant_by_marque_and_carrosserie_and_transmission.keys %}
+                        {% if marque in vente_marques %}
+                            <option value="{{ marque }}"> {{ marque|capfirst }} </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col">
+                <select class="form-select" id="carrosserie" name="carrosserie" disabled>
+                    <option value="" disabled selected>Carrosserie</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <select class="form-select" id="transmission" name="transmission" disabled>
+                    <option value="" disabled selected>Boite de vitesse</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <select class="form-select" id="carburant" name="carburant" disabled>
+                    <option value="" disabled selected>Carburant</option>
+                </select>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-outline-secondary w-100 w-md-auto" type="submit" style="background: #015479; color: #fff;"
+                data-bs-toggle="modal" data-bs-target="#errorModal">
+                    <i class="fa fa-search"></i> Recherche
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- Modal d'erreur -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">
+                    <span class="text-danger"><i class="bi bi-exclamation-circle-fill"></i> Erreur de formulaire</span>    
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Veuillez sélectionner tous les critères avant de lancer la recherche.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.rechercheMarque form');
+        const marqueSelect = document.getElementById('marque');
+        const carrosserieSelect = document.getElementById('carrosserie');
+        const transmissionSelect = document.getElementById('transmission');
+        const carburantSelect = document.getElementById('carburant');
+        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        const carburantData = {{ carburant_by_marque_and_carrosserie_and_transmission|safe }};
+
+        // Fonction de gestion de l'affichage des options selon les sélections
+        function updateOptions(select, options, placeholder) {
+            select.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
+            options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                select.appendChild(optionElement);
+            });
+        }
+
+        // Validation du formulaire avant soumission
+        form.addEventListener('submit', function (event) {
+            if (!marqueSelect.value || !carrosserieSelect.value || !transmissionSelect.value || !carburantSelect.value) {
+                event.preventDefault();
+                errorModal.show();
+            }
+        });
+
+        // Gestion de l'affichage des options dynamiques pour chaque critère
+        marqueSelect.addEventListener('change', function () {
+            const marque = marqueSelect.value;
+            carrosserieSelect.disabled = transmissionSelect.disabled = carburantSelect.disabled = true;
+            carrosserieSelect.innerHTML = transmissionSelect.innerHTML = carburantSelect.innerHTML = '';
+
+            if (marque && carburantData[marque]) {
+                updateOptions(carrosserieSelect, Object.keys(carburantData[marque]), 'Choisissez une carrosserie');
+                carrosserieSelect.disabled = false;
+            }
+        });
+
+        carrosserieSelect.addEventListener('change', function () {
+            const marque = marqueSelect.value;
+            const carrosserie = carrosserieSelect.value;
+
+            transmissionSelect.disabled = carburantSelect.disabled = true;
+            transmissionSelect.innerHTML = carburantSelect.innerHTML = '';
+
+            if (marque && carrosserie && carburantData[marque][carrosserie]) {
+                updateOptions(transmissionSelect, Object.keys(carburantData[marque][carrosserie]), 'Choisissez une transmission');
+                transmissionSelect.disabled = false;
+            }
+        });
+
+        transmissionSelect.addEventListener('change', function () {
+            const marque = marqueSelect.value;
+            const carrosserie = carrosserieSelect.value;
+            const transmission = transmissionSelect.value;
+
+            carburantSelect.disabled = true;
+            carburantSelect.innerHTML = '<option value="" disabled selected>Choisissez un carburant</option>';
+
+            if (marque && carrosserie && transmission && carburantData[marque][carrosserie][transmission]) {
+                updateOptions(carburantSelect, carburantData[marque][carrosserie][transmission], 'Choisissez un carburant');
+                carburantSelect.disabled = false;
+            }
+        });
+    });
+</script>
+
+<script>
+    const errorModal = document.getElementById('errorModal');
+    errorModal.addEventListener('hidden.bs.modal', function () {
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove(); // Supprime le backdrop
+        }
+        document.body.classList.remove('modal-open'); // Retire la classe modal-open
+        document.body.style.paddingRight = ''; // Réinitialise le padding droit
+    });
+</script>
