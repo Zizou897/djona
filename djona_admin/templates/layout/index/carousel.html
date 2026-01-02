@@ -1,7 +1,8 @@
+{% load static %}
 <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
     <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="10000">
-            <img src="static/image/Container.png" class="d-block w-100" alt="...">
+            <img src="{% static 'image/Container.png' %}" class="d-block w-100" alt="...">
             
             <div class="carousel-caption d-none d-md-flex justify-content-center" style="position: absolute;bottom:70px;">
                 <div class="d-flex justify-content-center mt-3 mt-lg-0 active-btn">
