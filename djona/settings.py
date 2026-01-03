@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,6 +146,7 @@ EMAIL_PORT = 587
 SECURE_SSL_REDIRECT = False 
 SESSION_COOKIE_SECURE = False 
 CSRF_COOKIE_SECURE = False
+
 
 
 
